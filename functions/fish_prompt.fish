@@ -11,7 +11,7 @@ function fish_prompt
             case 0
                 set -g __fish_prompt_char '#'
             case '*'
-                set -g __fish_prompt_char 'λ'
+                set -g __fish_prompt_char 'Ω'
         end
     end
 
@@ -25,6 +25,7 @@ function fish_prompt
     set -l blue (set_color blue)
     set -l limegreen (set_color 87ff00)
     set -l purple (set_color af5fff)
+    set -l red (set_color red)
 
     # Configure __fish_git_prompt
     set -g __fish_git_prompt_char_stateseparator ' '
@@ -42,14 +43,14 @@ function fish_prompt
     ##
     ## Line 1
     ##
-    echo -n $hostcolor'╭─'$hotpink$current_user$white' at '$orange$__fish_prompt_hostname$white' in '$limegreen(pwd|sed "s=$HOME=⌁=")$turquoise
+    echo -n $hotpink'╭─ '$limegreen(pwd|sed "s=$HOME=~=")$turquoise
     __fish_git_prompt " (%s)"
     echo
 
     ##
     ## Line 2
     ##
-    echo -n $hostcolor'╰'
+    echo -n $hotpink'╰─ '
 
     # Disable virtualenv's default prompt
     set -g VIRTUAL_ENV_DISABLE_PROMPT true
@@ -94,6 +95,11 @@ function fish_prompt
     ##
     ## Rest of the prompt
     ##
-    echo -n $hostcolor'─'$white$__fish_prompt_char $normal
-end
 
+    set -l prompt_color $normal
+    if test $last_status != 0
+        set prompt_color $red
+    end
+
+    echo -n $prompt_color$__fish_prompt_char $normal
+end
